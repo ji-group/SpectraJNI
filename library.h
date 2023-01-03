@@ -1,0 +1,6 @@
+#ifndef SPECTRAJNI_LIBRARY_H
+#define SPECTRAJNI_LIBRARY_H
+
+void hello();
+
+#endif //SPECTRAJNI_LIBRARY_H
