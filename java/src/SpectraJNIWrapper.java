@@ -14,8 +14,11 @@ package spectra;
 
 public class SpectraJNIWrapper {
 
-    private SpectraJNIWrapper () {
+    public SpectraJNIWrapper () {
+    }
 
+    static {
+        System.load("/usr/local/lib/libspectra-jni.jnilib");
     }
 
     public native int createInstance(int matrixCount,
@@ -25,6 +28,8 @@ public class SpectraJNIWrapper {
                                 int[] indices,
                                 double[] values,
                                 int nonZeroCount);
+
+    public native String getVersion();
 
     public native int getEigenVectors(int matrix,
                                       int numEigenValues,

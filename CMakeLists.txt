@@ -3,7 +3,9 @@ project(SpectraJNI)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_library(spectra-jni SHARED spectra_SpectraJNIWrapper.cpp)
+add_library(spectra-jni SHARED
+        dr_evomodel_substmodel_spectra_SpectraJNIWrapper.cpp
+        dr_evomodel_substmodel_spectra_SpectraJNIWrapper.h)
 
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 find_package (Spectra REQUIRED NO_MODULE)
@@ -32,4 +34,18 @@ else(JNI_FOUND)
     endif(BUILD_JNI)
 endif(JNI_FOUND)
 
+if(APPLE)
+    set_target_properties(spectra-jni PROPERTIES PREFIX "lib" SUFFIX ".jnilib")
+elseif(WIN32)
+    set_target_properties(spectra-jni PROPERTIES PREFIX "" SUFFIX "64.dll")
+elseif(UNIX)
+    set_target_properties(spectra-jni PROPERTIES PREFIX "lib" SUFFIX ".so")
+endif(APPLE)
+
 add_subdirectory(test)
+
+set(BEAGLE_INSTALL_DIR lib)
+set(BEAGLE_HEADER_DIR include/libhmsbeagle-1/libhmsbeagle)
+install(TARGETS spectra-jni
+        DESTINATION ${BEAGLE_INSTALL_DIR}
+        )

@@ -1,4 +1,4 @@
-#include "spectra_SpectraJNIWrapper.h"
+#include "dr_evomodel_substmodel_spectra_SpectraJNIWrapper.h"
 #include <Spectra/MatOp/SparseGenMatProd.h>
 #include <Spectra/GenEigsRealShiftSolver.h>
 #include <Spectra/MatOp/DenseGenRealShiftSolve.h>
@@ -97,25 +97,26 @@ typedef std::shared_ptr<SpectraImpl> InstancePtr;
 std::vector<InstancePtr> instances;
 
 /*
- * Class:     spectra_SpectraJNIWrapper
+ * Class:     dr_evomodel_substmodel_spectra_SpectraJNIWrapper
  * Method:    createInstance
  * Signature: (II)I
  */
-JNIEXPORT jint JNICALL Java_spectra_SpectraJNIWrapper_createInstance
+JNIEXPORT jint JNICALL Java_dr_evomodel_substmodel_spectra_SpectraJNIWrapper_createInstance
         (JNIEnv * env, jobject obj, jint matrixCount, jint stateCount) {
-    int errorCode;
+    jint errorCode;
     instances.emplace_back(
             SpectraImpl::factory(matrixCount, stateCount, &errorCode)
     );
+    return errorCode;
 }
 
 
 /*
- * Class:     spectra_SpectraJNIWrapper
+ * Class:     dr_evomodel_substmodel_spectra_SpectraJNIWrapper
  * Method:    setMatrix
  * Signature: (I[I[DI)I
  */
-JNIEXPORT jint JNICALL Java_spectra_SpectraJNIWrapper_setMatrix
+JNIEXPORT jint JNICALL Java_dr_evomodel_substmodel_spectra_SpectraJNIWrapper_setMatrix
         (JNIEnv * env, jobject obj, jint matrix, jintArray inIndices, jdoubleArray inValues, jint nonZeroCount) {
     jint *indices = env->GetIntArrayElements(inIndices, NULL);
     jdouble *values = env->GetDoubleArrayElements(inValues, NULL);
@@ -129,11 +130,11 @@ JNIEXPORT jint JNICALL Java_spectra_SpectraJNIWrapper_setMatrix
 
 
 /*
- * Class:     spectra_SpectraJNIWrapper
+ * Class:     dr_evomodel_substmodel_spectra_SpectraJNIWrapper
  * Method:    getEigenVectors
  * Signature: (IID[D[D)I
  */
-JNIEXPORT jint JNICALL Java_spectra_SpectraJNIWrapper_getEigenVectors
+JNIEXPORT jint JNICALL Java_dr_evomodel_substmodel_spectra_SpectraJNIWrapper_getEigenVectors
         (JNIEnv *env, jobject obj, jint matrix, jint numEigenValues, jdouble sigma, jdoubleArray outEigenValues, jdoubleArray outEigenVectors) {
     jdouble *eigenValues = env->GetDoubleArrayElements(outEigenValues, NULL);
     jdouble *eigenVectors = env->GetDoubleArrayElements(outEigenVectors, NULL);
@@ -144,5 +145,15 @@ JNIEXPORT jint JNICALL Java_spectra_SpectraJNIWrapper_getEigenVectors
     env->ReleaseDoubleArrayElements(outEigenVectors, eigenVectors, 0);
 
     return errCode;
+}
+
+/*
+ * Class:     dr_evomodel_substmodel_spectra_SpectraJNIWrapper
+ * Method:    getVersion
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_dr_evomodel_substmodel_spectra_SpectraJNIWrapper_getVersion
+        (JNIEnv *env, jobject obj) {
+    return env->NewStringUTF("0.0.1");
 }
 
