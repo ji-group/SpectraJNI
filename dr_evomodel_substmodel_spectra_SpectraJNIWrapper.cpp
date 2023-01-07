@@ -37,6 +37,17 @@ public:
                   int* indices,
                   double* values,
                   int nonZeroCount){
+#ifdef SPECTRA_DEBUG_FLOW
+        std::cout<<"In indices=";
+        for (int i = 0; i < nonZeroCount; i++) {
+            std::cout<<indices[2 * i]<<", "<<indices[2 * i + 1]<<", ";
+        }
+        std::cout<<"\nIn values=";
+        for (int i = 0; i < nonZeroCount; i++) {
+            std::cout<<values[i]<<", ";
+        }
+        std::cout<<std::endl;
+#endif
         std::vector<Eigen::Triplet<double>> tripletVector;
         for (int i = 0; i < nonZeroCount; i++) {
             tripletVector.push_back(Eigen::Triplet<double>(indices[2 * i], indices[2 * i + 1], values[i]));
@@ -60,8 +71,14 @@ public:
         Eigen::VectorXcd evals = eigs.eigenvalues();
         Eigen::MatrixXcd evecs = eigs.eigenvectors();
 
-        memcpy(eigenValues, evals.data(), 2 * numEigenValues);
-        memcpy(eigenVectors, evecs.data(), 2 * numEigenValues * kState);
+        memcpy(eigenValues, evals.data(), 2 * numEigenValues * sizeof(double));
+        memcpy(eigenVectors, evecs.data(), 2 * numEigenValues * kState * sizeof(double));
+
+#ifdef SPECTRA_DEBUG_FLOW
+        std::cout<<"matrix =\n"<<matrices[matrix]<<std::endl;
+        std::cout<<"eigen values =\n"<<evals<<std::endl;
+        std::cout<<"eigen vectors =\n"<<evecs<<std::endl;
+#endif
         return SPECTRA_SUCCESS;
     }
 
