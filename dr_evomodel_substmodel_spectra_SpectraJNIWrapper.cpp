@@ -9,6 +9,8 @@
 #include <Eigen/Dense>
 #include <iostream>
 
+#define SPECTRA_DEBUG_FLOW
+
 typedef Eigen::SparseMatrix<double> SpMatrix;
 using SparseOp = Spectra::SparseGenRealShiftSolve<double>;
 
@@ -105,7 +107,6 @@ public:
 
 
     ~SpectraImpl() {
-        free(matrices);
     };
 
 };
