@@ -1,2 +1,2 @@
 # SpectraJNI
-Minimal functionalities to use Spectra's sparse eigen vector solver in BEAST
+Minimal functionalities to use [Spectra](https://github.com/yixuan/spectra)'s sparse eigen vector solver in BEAST
